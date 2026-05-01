@@ -14,33 +14,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #00c6ff);
-    background-size: 400% 400%;
-    animation: gradientMove 10s ease infinite;
-}
-
-@keyframes gradientMove {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+    background: #f5f7fa;
 }
 
 .card {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(15px);
-    padding: 25px;
-    border-radius: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
     width: 340px;
     text-align: center;
-    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-h1 { color: #fff; }
-
-p {
-    font-size: 14px;
-    color: #ddd;
+video {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 10px;
 }
 
 button {
@@ -48,90 +37,67 @@ button {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 12px;
-    background: #00c6ff;
-    color: black;
-    font-weight: bold;
+    border-radius: 10px;
+    background: black;
+    color: white;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 button:hover {
-    transform: scale(1.05);
-    background: #00e0ff;
+    background: #333;
 }
 
 #result {
-    margin-top: 20px;
-    font-size: 15px;
-    color: #fff;
-    line-height: 1.6;
-}
-
-#scan {
-    display: none;
     margin-top: 15px;
-    font-size: 14px;
-    color: #00e0ff;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0% {opacity: 1;}
-    50% {opacity: 0.3;}
-    100% {opacity: 1;}
+    font-size: 15px;
+    color: #222;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="card">
     <h1>سودان واحد 🤍</h1>
-    <p>ارفع صورتك وخد رسالة من القلب</p>
+    <p>صور نفسك بالكاميرا وخد رسالتك</p>
 
-    <input type="file" id="file">
+    <video id="video" autoplay></video>
 
-    <button onclick="generate()">احصل على رسالتك</button>
-
-    <div id="scan">AI scanning your image... 🤖</div>
+    <button onclick="capture()">التقاط الصورة</button>
 
     <div id="result"></div>
 </div>
 
 <script>
-function generate() {
+const video = document.getElementById("video");
+const result = document.getElementById("result");
 
-    const scan = document.getElementById("scan");
-    const box = document.getElementById("result");
+// تشغيل الكاميرا
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+    video.srcObject = stream;
+});
 
-    scan.style.display = "block";
-    box.innerHTML = "";
+// الرسائل
+const messages = [
+    "أنت شخص جميل بطريقتك الخاصة 🤍",
+    "فيك طيبة بتخلي الناس ترتاح ليك",
+    "وجودك مهم حتى لو ما حاسس",
+    "ابتسامتك بتفرق في يوم غيرك",
+    "إنت أقوى مما تتخيل"
+];
 
-    const messages = [
-        {text:"أنت شخص جميل بطريقتك الخاصة 🤍", author:"سودان واحد"},
-        {text:"فيك طيبة بتخلي العالم أهدى", author:"رسالة"},
-        {text:"وجودك مهم حتى لو ما حاسس", author:"دعم"},
-        {text:"ابتسامتك ممكن تغيّر يوم شخص", author:"نور"},
-        {text:"إنت أقوى مما تتخيل", author:"رسالة مجهولة"},
-        {text:"إحنا مختلفين لكن القلوب واحدة 🤍", author:"سودان واحد"}
-    ];
+function capture() {
+
+    result.innerHTML = "جاري تحليل صورتك...";
 
     setTimeout(() => {
 
-        scan.style.display = "none";
+        const msg = messages[Math.floor(Math.random()*messages.length)];
 
-        const msg = messages[Math.floor(Math.random() * messages.length)];
+        result.innerHTML = "✨ " + msg;
 
-        box.innerHTML = `
-            ✨ ${msg.text} <br><br>
-            <small>— ${msg.author}</small>
-        `;
-
-    }, 2000);
-
-    document.getElementById("file").value = "";
+    }, 1500);
 }
 </script>
 
