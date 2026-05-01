@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-
 body{
     margin:0;
     font-family:'Cairo',sans-serif;
@@ -19,54 +18,47 @@ body{
     color:white;
 }
 
-/* 🌍 حالات الخلفية */
+/* 🌍 الخلفيات */
 body.good{
     background: linear-gradient(to bottom, #000 33%, #fff 33%, #fff 66%, #d40000 66%);
 }
-
 body.mid{
     background: linear-gradient(135deg, #1a1a1a, #333, #111);
 }
-
 body.bad{
     background: linear-gradient(135deg, #000, #400000, #000);
 }
 
-/* 🧠 container */
 .container{
     width:340px;
 }
 
-/* 🪟 card */
 .card{
-    background: rgba(0,0,0,0.6);
+    background:rgba(0,0,0,0.6);
     padding:22px;
     border-radius:18px;
-    backdrop-filter: blur(10px);
     text-align:center;
-    box-shadow:0 15px 40px rgba(0,0,0,0.4);
 }
 
-/* ❓ question */
+/* السؤال */
 #question{
     font-size:18px;
     margin-bottom:15px;
 }
 
-/* 🔘 buttons */
+/* الأزرار */
 .option button{
     width:48%;
     padding:12px;
     border:none;
     border-radius:10px;
-    cursor:pointer;
     font-weight:bold;
+    cursor:pointer;
 }
-
 .yes{background:#00c6ff;}
 .no{background:#ff4d4d;}
 
-/* 📦 result */
+/* النتائج */
 #results{
     margin-top:15px;
 }
@@ -87,7 +79,6 @@ body.bad{
 .black{background:#000;}
 .white{background:#fff;color:#000;}
 .red{background:#b00000;}
-
 </style>
 </head>
 
@@ -120,7 +111,8 @@ let score=0;
 const questions=[
 "هل تحب السلام؟",
 "هل تتقبل اختلاف الآخرين والقبائل؟",
-"هل تؤمن أن الناس متساويين وكلهم واحد؟"
+"هل تؤمن أن الناس متساويين وكلهم واحد؟",
+"هل تقف ضد العنصرية؟"
 ];
 
 document.getElementById("question").innerText=questions[0];
@@ -145,32 +137,32 @@ function showResult(){
     const box=document.getElementById("results");
 
     box.innerHTML="";
-
     document.body.className="";
 
     // 🟢 كله نعم
-    if(score===3){
+    if(score===4){
 
         document.body.className="good";
 
         box.innerHTML=`
         <div class="card-item black">🤍 أنت تؤمن بالسلام والوحدة</div>
         <div class="card-item white">💡 السودان واحد مهما اختلفنا</div>
-        <div class="card-item red">✨ وجودك جزء من التغيير الإيجابي</div>
-        <div class="card-item white">🤍 انت شخص جميل واليوم لا يكمل بدونك</div>
+        <div class="card-item red">✨ موقفك إيجابي تجاه التنوع</div>
+        <div class="card-item white">🤍 ما في مسميات بتختزل الإنسان</div>
         `;
 
     }
 
     // 🟡 مختلط
-    else if(score===1 || score===2){
+    else if(score>=1 && score<=3){
 
         document.body.className="mid";
 
         box.innerHTML=`
-        <div class="card-item white">⚠️ لديك مساحة للتفكير حول قبول الآخرين</div>
+        <div class="card-item white">⚠️ لديك مساحة لإعادة التفكير في بعض المفاهيم</div>
         <div class="card-item black">💡 التنوع قوة وليس تهديد</div>
-        <div class="card-item red">🤍 حاول ترى الناس بشكل أوسع</div>
+        <div class="card-item red">🤍 الاحترام أساس التعايش</div>
+        <div class="card-item white">🤍 ما في مسميات بتختزل الإنسان</div>
         `;
 
     }
@@ -181,9 +173,10 @@ function showResult(){
         document.body.className="bad";
 
         box.innerHTML=`
-        <div class="card-item red">⚠️ هذا التفكير يؤدي إلى توتر داخل المجتمع</div>
-        <div class="card-item black">💡 الاختلاف طبيعي وليس سبب للكراهية</div>
-        <div class="card-item white">🤍 نأمل أن تعيد التفكير في مفهوم التعايش والسلام</div>
+        <div class="card-item red">⚠️ هذا التفكير يعارض مبدأ التعايش</div>
+        <div class="card-item black">💡 الاختلاف لا يعني الكراهية</div>
+        <div class="card-item white">🤍 نأمل إعادة النظر في مفهوم الكرامة الإنسانية</div>
+        <div class="card-item red">🤍 ما في مسميات بتختزل الإنسان</div>
         `;
     }
 }
@@ -192,3 +185,8 @@ function showResult(){
 
 </body>
 </html>
+‏<div id="results"></div>
+
+‏<p style="margin-top:20px; text-align:center; opacity:0.7;">
+وإذا كنت مريض ف أتعالج 😉
+‏</p>
