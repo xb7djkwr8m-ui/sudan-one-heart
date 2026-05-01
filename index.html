@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>سودان واحد 🤍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(-45deg, #89f7fe, #66a6ff, #fbc2eb, #a6c1ee);
+    background-size: 400% 400%;
+    animation: bg 12s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+@keyframes bg {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.card {
+    background: rgba(255,255,255,0.92);
+    padding: 25px;
+    border-radius: 20px;
+    width: 340px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 14px;
+    color: #444;
+}
+
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: black;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #333;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 15px;
+    color: #222;
+    line-height: 1.6;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+    <h1>سودان واحد 🤍</h1>
+    <p>ارفع صورتك وخد رسالة من القلب</p>
+
+    <input type="file" id="file">
+
+    <button onclick="generate()">احصل على رسالتك</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function generate() {
+
+    const messages = [
+        {
+            text: "أنت شخص جميل بطريقتك الخاصة، وجودك في الدنيا دي بيفرق حتى لو ما حاسس.",
+            author: "رسالة من قلب السودان 🤍"
+        },
+        {
+            text: "ما في فرق بيننا غير الشكل، لكن القلوب واحدة والنية الطيبة تجمعنا دايمًا.",
+            author: "سودان واحد ✨"
+        },
+        {
+            text: "يمكن الحياة ما دايمًا سهلة، لكن فيك قوة بتخليك تكمل مهما حصل.",
+            author: "كلمة دعم بسيطة"
+        },
+        {
+            text: "ابتسامتك ممكن تغيّر يوم شخص تاني بدون ما تحس، خليك دايمًا مصدر نور.",
+            author: "رسائل إيجابية"
+        },
+        {
+            text: "إحنا مختلفين في الشكل، لكن في النهاية كلنا بشر بنحس وبنحتاج نحب وننحب.",
+            author: "منصة سودان واحد 🤍"
+        },
+        {
+            text: "يمكن ما تعرف قيمتك الحقيقية، لكن في ناس شايفينك أجمل مما تتخيل.",
+            author: "كلمة مجهولة"
+        }
+    ];
+
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+
+    const box = document.getElementById("result");
+
+    box.innerHTML = "جاري إرسال رسالتك...";
+
+    setTimeout(() => {
+        box.innerHTML = `
+            ✨ ${msg.text} <br><br>
+            <small>— ${msg.author}</small>
+        `;
+    }, 1200);
+
+    document.getElementById("file").value = "";
+}
+</script>
+
+</body>
+</html>
