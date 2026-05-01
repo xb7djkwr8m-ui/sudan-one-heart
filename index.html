@@ -10,37 +10,37 @@
 body {
     margin: 0;
     font-family: 'Cairo', sans-serif;
-    background: linear-gradient(-45deg, #89f7fe, #66a6ff, #fbc2eb, #a6c1ee);
-    background-size: 400% 400%;
-    animation: bg 12s ease infinite;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    text-align: center;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #00c6ff);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
 }
 
-@keyframes bg {
+@keyframes gradientMove {
     0% {background-position: 0% 50%;}
     50% {background-position: 100% 50%;}
     100% {background-position: 0% 50%;}
 }
 
 .card {
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
     padding: 25px;
     border-radius: 20px;
     width: 340px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    color: white;
 }
 
-h1 {
-    margin-bottom: 5px;
-}
+h1 { color: #fff; }
 
 p {
     font-size: 14px;
-    color: #444;
+    color: #ddd;
 }
 
 button {
@@ -49,22 +49,37 @@ button {
     padding: 12px;
     border: none;
     border-radius: 12px;
-    background: black;
-    color: white;
+    background: #00c6ff;
+    color: black;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
 }
 
 button:hover {
     transform: scale(1.05);
-    background: #333;
+    background: #00e0ff;
 }
 
 #result {
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 15px;
-    color: #222;
+    color: #fff;
     line-height: 1.6;
+}
+
+#scan {
+    display: none;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #00e0ff;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% {opacity: 1;}
+    50% {opacity: 0.3;}
+    100% {opacity: 1;}
 }
 </style>
 
@@ -80,51 +95,41 @@ button:hover {
 
     <button onclick="generate()">احصل على رسالتك</button>
 
+    <div id="scan">AI scanning your image... 🤖</div>
+
     <div id="result"></div>
 </div>
 
 <script>
 function generate() {
 
-    const messages = [
-        {
-            text: "أنت شخص جميل بطريقتك الخاصة، وجودك في الدنيا دي بيفرق حتى لو ما حاسس.",
-            author: "رسالة من قلب السودان 🤍"
-        },
-        {
-            text: "ما في فرق بيننا غير الشكل، لكن القلوب واحدة والنية الطيبة تجمعنا دايمًا.",
-            author: "سودان واحد ✨"
-        },
-        {
-            text: "يمكن الحياة ما دايمًا سهلة، لكن فيك قوة بتخليك تكمل مهما حصل.",
-            author: "كلمة دعم بسيطة"
-        },
-        {
-            text: "ابتسامتك ممكن تغيّر يوم شخص تاني بدون ما تحس، خليك دايمًا مصدر نور.",
-            author: "رسائل إيجابية"
-        },
-        {
-            text: "إحنا مختلفين في الشكل، لكن في النهاية كلنا بشر بنحس وبنحتاج نحب وننحب.",
-            author: "منصة سودان واحد 🤍"
-        },
-        {
-            text: "يمكن ما تعرف قيمتك الحقيقية، لكن في ناس شايفينك أجمل مما تتخيل.",
-            author: "كلمة مجهولة"
-        }
-    ];
-
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-
+    const scan = document.getElementById("scan");
     const box = document.getElementById("result");
 
-    box.innerHTML = "جاري إرسال رسالتك...";
+    scan.style.display = "block";
+    box.innerHTML = "";
+
+    const messages = [
+        {text:"أنت شخص جميل بطريقتك الخاصة 🤍", author:"سودان واحد"},
+        {text:"فيك طيبة بتخلي العالم أهدى", author:"رسالة"},
+        {text:"وجودك مهم حتى لو ما حاسس", author:"دعم"},
+        {text:"ابتسامتك ممكن تغيّر يوم شخص", author:"نور"},
+        {text:"إنت أقوى مما تتخيل", author:"رسالة مجهولة"},
+        {text:"إحنا مختلفين لكن القلوب واحدة 🤍", author:"سودان واحد"}
+    ];
 
     setTimeout(() => {
+
+        scan.style.display = "none";
+
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+
         box.innerHTML = `
             ✨ ${msg.text} <br><br>
             <small>— ${msg.author}</small>
         `;
-    }, 1200);
+
+    }, 2000);
 
     document.getElementById("file").value = "";
 }
