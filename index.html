@@ -2,85 +2,92 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>سودان واحد 🤍</title>
+<title>Sudan Unity Test 🤍</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Cairo', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: black;
+
+body{
+    margin:0;
+    font-family:'Cairo',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:0.6s;
+    color:white;
 }
 
-.container {
-    width: 340px;
-    text-align: center;
+/* 🌍 حالات الخلفية */
+body.good{
+    background: linear-gradient(to bottom, #000 33%, #fff 33%, #fff 66%, #d40000 66%);
 }
 
-.main-card {
-    background: white;
-    padding: 15px;
-    border-radius: 15px;
+body.mid{
+    background: linear-gradient(135deg, #1a1a1a, #333, #111);
 }
 
-video, img {
-    width: 100%;
-    border-radius: 12px;
+body.bad{
+    background: linear-gradient(135deg, #000, #400000, #000);
 }
 
-.video-box {
-    position: relative;
+/* 🧠 container */
+.container{
+    width:340px;
 }
 
-.emoji {
-    position: absolute;
-    top: 30%;
-    left: 40%;
-    font-size: 50px;
-    display: none;
+/* 🪟 card */
+.card{
+    background: rgba(0,0,0,0.6);
+    padding:22px;
+    border-radius:18px;
+    backdrop-filter: blur(10px);
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,0.4);
 }
 
-/* 🎨 بطاقات */
-.card {
-    padding: 12px;
-    border-radius: 12px;
-    margin-top: 10px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: show 0.5s forwards;
+/* ❓ question */
+#question{
+    font-size:18px;
+    margin-bottom:15px;
 }
 
-.card-black { background:black; color:white; }
-.card-white { background:white; color:black; }
-.card-red { background:red; color:white; }
-
-@keyframes show {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* 🔘 buttons */
+.option button{
+    width:48%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-button {
-    margin-top: 10px;
-    padding: 12px;
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    background: black;
-    color: white;
+.yes{background:#00c6ff;}
+.no{background:#ff4d4d;}
+
+/* 📦 result */
+#results{
+    margin-top:15px;
 }
 
-#scan {
-    margin-top: 10px;
-    display: none;
-    color: black;
+.card-item{
+    margin-top:10px;
+    padding:14px;
+    border-radius:14px;
+    animation:pop 0.4s ease forwards;
+    opacity:0;
+    transform:translateY(10px);
 }
+
+@keyframes pop{
+    to{opacity:1;transform:translateY(0);}
+}
+
+.black{background:#000;}
+.white{background:#fff;color:#000;}
+.red{background:#b00000;}
+
 </style>
 </head>
 
@@ -88,77 +95,99 @@ button {
 
 <div class="container">
 
-<div class="main-card">
-<h3>سودان واحد 🤍</h3>
+<div class="card" id="quiz">
 
-<div class="video-box">
-<video id="video" autoplay></video>
-<img id="img" style="display:none;">
-<div class="emoji" id="emoji">😂</div>
+<h2>Sudan Unity Test 🤍</h2>
+
+<div id="question">هل تحب السلام؟</div>
+
+<div class="option">
+<button class="yes" onclick="answer('yes')">نعم</button>
+<button class="no" onclick="answer('no')">لا</button>
 </div>
 
-<button onclick="capture()">التقاط</button>
-<div id="scan">جارٍ التعرف على الوجه... 🤖</div>
 </div>
 
-<div id="cards"></div>
+<div id="results"></div>
 
 </div>
 
 <script>
-const video = document.getElementById("video");
-const img = document.getElementById("img");
-const scan = document.getElementById("scan");
-const cards = document.getElementById("cards");
-const emoji = document.getElementById("emoji");
 
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => video.srcObject = stream);
+let step=0;
+let score=0;
 
-const messages = ["إنت جزء من سودان واحد 🤍","وجودك مهم","الاختلاف جمال"];
-const tips = ["💡 لا للعنصرية","💡 السلام أهم","💡 الكلمة الطيبة"];
-const nice = ["أنت جميل 🤍","إنت مهم ✨","وجودك بيفرق"];
+const questions=[
+"هل تحب السلام؟",
+"هل تتقبل اختلاف الآخرين والقبائل؟",
+"هل تؤمن أن الناس متساويين وكلهم واحد؟"
+];
 
-function capture() {
+document.getElementById("question").innerText=questions[0];
 
-    scan.style.display = "block";
-    cards.innerHTML = "";
+function answer(ans){
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    if(ans==="yes") score++;
 
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0);
+    step++;
 
-    img.src = canvas.toDataURL();
-    img.style.display = "block";
-    video.style.display = "none";
-
-    setTimeout(() => {
-
-        scan.innerHTML = "تم التعرف على الوجه ✔️";
-        emoji.style.display = "block";
-
-        let m = messages[Math.floor(Math.random()*messages.length)];
-        let t = tips[Math.floor(Math.random()*tips.length)];
-        let n = nice[Math.floor(Math.random()*nice.length)];
-
-        // 👇 يظهروا واحد واحد
-        setTimeout(() => {
-            cards.innerHTML += `<div class="card card-black">✨ ${m}</div>`;
-        }, 300);
-
-        setTimeout(() => {
-            cards.innerHTML += `<div class="card card-white">${t}</div>`;
-        }, 900);
-
-        setTimeout(() => {
-            cards.innerHTML += `<div class="card card-red">💬 ${n}</div>`;
-        }, 1500);
-
-    }, 2000);
+    if(step<questions.length){
+        document.getElementById("question").innerText=questions[step];
+    }else{
+        showResult();
+    }
 }
+
+function showResult(){
+
+    document.getElementById("quiz").style.display="none";
+
+    const box=document.getElementById("results");
+
+    box.innerHTML="";
+
+    document.body.className="";
+
+    // 🟢 كله نعم
+    if(score===3){
+
+        document.body.className="good";
+
+        box.innerHTML=`
+        <div class="card-item black">🤍 أنت تؤمن بالسلام والوحدة</div>
+        <div class="card-item white">💡 السودان واحد مهما اختلفنا</div>
+        <div class="card-item red">✨ وجودك جزء من التغيير الإيجابي</div>
+        <div class="card-item white">🤍 انت شخص جميل واليوم لا يكمل بدونك</div>
+        `;
+
+    }
+
+    // 🟡 مختلط
+    else if(score===1 || score===2){
+
+        document.body.className="mid";
+
+        box.innerHTML=`
+        <div class="card-item white">⚠️ لديك مساحة للتفكير حول قبول الآخرين</div>
+        <div class="card-item black">💡 التنوع قوة وليس تهديد</div>
+        <div class="card-item red">🤍 حاول ترى الناس بشكل أوسع</div>
+        `;
+
+    }
+
+    // 🔴 كله لا
+    else{
+
+        document.body.className="bad";
+
+        box.innerHTML=`
+        <div class="card-item red">⚠️ هذا التفكير يؤدي إلى توتر داخل المجتمع</div>
+        <div class="card-item black">💡 الاختلاف طبيعي وليس سبب للكراهية</div>
+        <div class="card-item white">🤍 نأمل أن تعيد التفكير في مفهوم التعايش والسلام</div>
+        `;
+    }
+}
+
 </script>
 
 </body>
