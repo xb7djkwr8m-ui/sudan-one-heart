@@ -14,43 +14,87 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f5f7fa;
+    background: radial-gradient(circle at top, #1a1a1a, #000);
+    color: white;
 }
 
 .card {
-    background: white;
-    padding: 20px;
-    border-radius: 18px;
-    width: 340px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    padding: 25px;
+    border-radius: 22px;
+    width: 360px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 0 40px rgba(0,198,255,0.2);
+    animation: float 3s ease-in-out infinite;
 }
 
-video {
+@keyframes float {
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-6px);}
+}
+
+h1 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 13px;
+    color: #ccc;
+}
+
+video, img {
     width: 100%;
-    border-radius: 12px;
+    border-radius: 14px;
     margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 button {
-    margin-top: 10px;
+    margin-top: 12px;
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 10px;
-    background: black;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
     color: white;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
-    background: #333;
+    transform: scale(1.05);
+}
+
+#scan {
+    display: none;
+    margin-top: 10px;
+    color: #00e0ff;
+    font-size: 14px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% {opacity:1;}
+    50% {opacity:0.3;}
+    100% {opacity:1;}
 }
 
 #result {
     margin-top: 15px;
     font-size: 15px;
-    color: #222;
+    line-height: 1.6;
+}
+
+#score {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #00e0ff;
+    display: none;
 }
 </style>
 </head>
@@ -58,47 +102,103 @@ button:hover {
 <body>
 
 <div class="card">
+
     <h1>سودان واحد 🤍</h1>
-    <p>صور نفسك بالكاميرا وخد رسالتك</p>
+
+    <p>
+        كلنا واحد • مافي عنصرية • ردع الفتن<br>
+        💬 أنت شخص جميل وجودك مهم
+    </p>
 
     <video id="video" autoplay></video>
 
-    <button onclick="capture()">التقاط الصورة</button>
+    <img id="snapshot" style="display:none;">
+
+    <div id="scan">AI scanning face... 🤖</div>
+
+    <button onclick="capture()">Start Scan</button>
+
+    <div id="score"></div>
 
     <div id="result"></div>
 </div>
 
 <script>
-const video = document.getElementById("video");
-const result = document.getElementById("result");
 
-// تشغيل الكاميرا
+const video = document.getElementById("video");
+const img = document.getElementById("snapshot");
+const scan = document.getElementById("scan");
+const result = document.getElementById("result");
+const score = document.getElementById("score");
+
 navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => {
-    video.srcObject = stream;
-});
+.then(stream => video.srcObject = stream);
 
 // الرسائل
 const messages = [
-    "أنت شخص جميل بطريقتك الخاصة 🤍",
-    "فيك طيبة بتخلي الناس ترتاح ليك",
+    "إنت جزء من سودان واحد 🤍",
+    "الاختلاف جمال مش مشكلة",
     "وجودك مهم حتى لو ما حاسس",
-    "ابتسامتك بتفرق في يوم غيرك",
+    "الكلمة الطيبة بتغير العالم",
     "إنت أقوى مما تتخيل"
+];
+
+// النصائح
+const tips = [
+    "💡 الإنسانية أقوى من أي اختلاف",
+    "💡 لا للعنصرية بأي شكل",
+    "💡 السلام يبدأ بكلمة",
+    "💡 الفتن بتضعف المجتمعات"
+];
+
+// الجمل اللطيفة
+const niceWords = [
+    "أنت شخص جميل اليوم لا يكتمل بدونك 🤍",
+    "وجودك يفرق حتى لو ما حاسس ✨",
+    "قيمتك أكبر مما تتخيل",
+    "إنت مهم أكتر مما تظن"
 ];
 
 function capture() {
 
-    result.innerHTML = "جاري تحليل صورتك...";
+    scan.style.display = "block";
+    result.innerHTML = "";
+    score.style.display = "none";
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+
+    img.src = canvas.toDataURL("image/png");
+    img.style.display = "block";
+
+    video.style.display = "none";
 
     setTimeout(() => {
 
+        scan.style.display = "none";
+
         const msg = messages[Math.floor(Math.random()*messages.length)];
+        const tip = tips[Math.floor(Math.random()*tips.length)];
+        const nice = niceWords[Math.floor(Math.random()*niceWords.length)];
 
-        result.innerHTML = "✨ " + msg;
+        let percent = Math.floor(Math.random() * 31) + 70;
 
-    }, 1500);
+        score.style.display = "block";
+        score.innerHTML = "تحليل الشخصية: " + percent + "% إيجابية 🤍";
+
+        result.innerHTML = `
+            ✨ ${msg} <br><br>
+            ${tip} <br><br>
+            💬 ${nice}
+        `;
+
+    }, 2000);
 }
+
 </script>
 
 </body>
